@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  etl:
+    build: .
+    container_name: social_media_etl
+    volumes:
+      - .:/app
+    command: python main.py
+  airflow:
+    image: apache/airflow:2.8.4
+    container_name: airflow
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=SequentialExecutor
+    volumes:
+      - ./dags:/opt/airflow/dags
+    ports:
+      - "8080:8080"
+    command: >
+      bash -c "airflow db init &&
+               airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email admin@example.com &&
+               airflow webserver & airflow scheduler"
