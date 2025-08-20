@@ -1,111 +1,106 @@
-# Social Media ETL Pipeline
+# Social Media Analytics Pipeline   
 
-## Overview
-The **Social Media ETL** project collects and analyzes social media content (Twitter + YouTube) through an ETL process:
+This project is a **data pipeline for social media analytics**.  
+It collects, processes, and analyzes social media data, providing insights such as engagement metrics, sentiment analysis, and trending topics.  
 
-1. **Extract**: fetch posts from Twitter and YouTube  
-2. **Transform**: clean, normalize, and calculate `engagement_score`  
-3. **Load**: save the data into CSV files  
-4. **Analytics**: analyze top posts, daily engagement, and 7-day moving averages  
+---
 
-## Project Structure
+##  Table of Contents
+- [Overview](#overview)
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Docker Setup](#docker-setup)
+- [Analysis Modules](#analysis-modules)
 
-social_media_pipeline/
+---
+
+##  Overview
+This pipeline automates the process of:
+1. **Collecting** data from multiple sources.  
+2. **Processing** and cleaning the data.  
+3. **Analyzing** using different models (sentiment, trends, engagement).  
+4. **Visualizing** results with reports/dashboards.  
+
+---
+
+##  Features
+-  Social media data ingestion.  
+-  Data cleaning and preprocessing.  
+-  Sentiment analysis (positive/negative/neutral).  
+-  Trending hashtags/topics extraction.  
+-  Engagement analysis (likes, shares, comments).  
+-  Export results to CSV/JSON.  
+-  Dockerized for easy deployment.  
+
+---
+
+##  Project Structure
+```
+
+social\_media\_pipeline/
+│── docker-compose.yml
+│── Dockerfile
+│── requirements.txt
+│── README.md
 │
-├─ extract/
-│ ├─ twitter_api.py # fetch Twitter posts
-│ └─ youtube_api.py # fetch YouTube videos
+├── pipeline/
+│   ├── **init**.py
+│   ├── data\_ingestion.py
+│   ├── data\_cleaning.py
+│   ├── sentiment\_analysis.py
+│   ├── engagement\_analysis.py
+│   ├── trending\_topics.py
+│   └── utils.py
 │
-├─ transform/
-│ ├─ clean_normalize.py # merge, clean, and normalize data
-│ └─ enrich.py # add engagement_score
-│
-├─ load/
-│ └─ save_csv.py # save data to CSV
-│
-├─ analytics/
-│ ├─ metrics.py # calculate top posts & daily engagement
-│ └─ moving_avg.py # 7-day moving average
-│
-├─ dags/
-│ └─ social_media_etl.py # Airflow DAG
-│
-└─ main.py # run full ETL pipeline
+└── output/
+├── reports/
+└── visualizations/
 
+````
 
-## Extract
+---
 
-### Twitter
-**File:** `extract/twitter_api.py`  
-- Main function: `fetch_twitter_posts(query, max_results)`  
-- Uses Twitter API v2 to fetch recent tweets with stats: likes, comments, shares  
-
-### YouTube
-**File:** `extract/youtube_api.py`  
-- Main function: `fetch_youtube_videos(query, max_results)`  
-- Uses YouTube Data API to fetch recent videos with stats: likes, comments, shares  
-
-## Transform
-
-### Merge & Clean
-**File:** `transform/clean_normalize.py`  
-- `merge_posts(twitter_posts, youtube_posts)` merges lists  
-- `clean_and_normalize(df)` converts types, handles missing values, and normalizes dates  
-
-### Enrich Data
-**File:** `transform/enrich.py`  
-- `add_engagement_score(df)` calculates `engagement_score = likes + comments + shares`  
-
-## Load
-**File:** `load/save_csv.py`  
-- `save_to_csv(data, filename)` saves results to CSV  
-- Ensures folders exist and creates them if missing  
-
-## Analytics
-
-### Metrics
-**File:** `analytics/metrics.py`  
-- `get_top5_overall(df)` → top 5 posts overall  
-- `get_top3_per_platform(df)` → top 3 posts per platform  
-- `get_daily_engagement(df)` → daily engagement per platform  
-
-### Moving Average
-**File:** `analytics/moving_avg.py`  
-- `get_avg_last7days(df)` → 7-day moving average engagement per platform  
-
-## DAG (Airflow)
-**File:** `dags/social_media_etl.py`  
-- Defines DAG to run the ETL daily with Airflow  
-- Passes `query` (e.g., "AI") to `etl_pipeline`  
-
-## Main Pipeline
-**File:** `main.py`  
-- Main function: `etl_pipeline(query, twitter_results, youtube_results)`  
-- Steps: **Extract → Transform → Enrich → Load → Analytics**  
-- Prints results to terminal  
-
-## Requirements
-- Python 3.9+  
-- Libraries:
-pip install pandas requests google-api-python-client python-dateutil apache-airflow
-
-## Run
-
-Run pipeline directly:
+##  Installation
 ```bash
+git clone https://github.com/yourusername/social_media_pipeline.git
+cd social_media_pipeline
+pip install -r requirements.txt
+````
 
+---
+
+##  Usage
+
+Run the pipeline:
+
+```bash
 python main.py
+```
 
-Trigger DAG via Airflow
+---
 
-airflow dags trigger social_media_etl
+##  Docker Setup
+
+Build and run with Docker:
+
+```bash
+docker-compose up --build
+```
+
+---
+
+##  Analysis Modules
+
+* **Data Ingestion** → Collects raw social media data.
+* **Data Cleaning** → Removes duplicates, nulls, and noise.
+* **Sentiment Analysis** → Classifies posts into sentiment categories.
+* **Engagement Analysis** → Calculates likes, comments, shares stats.
+* **Trending Topics** → Extracts popular hashtags & keywords.
 
 
-## Output
-- CSV: `output/social_media_posts.csv`  
-- Terminal stats:
-  - Top 5 posts overall  
-  - Top 3 per platform  
-  - Daily engagement  
-  - 7-day average engagement
+```
 
+تحبني أزود فيه **أمثلة تشغيل بالكود (usage examples)** ولا نخليه كده high-level بس للعرض؟
+```
