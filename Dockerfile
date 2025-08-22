@@ -17,7 +17,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy source code
 COPY . .
 
-# Expose Airflow UI port (اختياري لو هتشغل Airflow داخل نفس الـ container)
+# Expose Airflow UI port
 EXPOSE 8080
 
 # Default command → run pipeline
